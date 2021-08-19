@@ -14,6 +14,7 @@ const Board: React.FC = () => {
 
 	const nextValue = _calculateNextValue(cells);
 	const winner = _calculateWinner(cells);
+	const status = _calculateStatus(winner, cells, nextValue);
 
 	const selectCell = (cellIndex: number) => {
 		// check if there's already a winner or there's already a value in the selected cell
@@ -39,6 +40,7 @@ const Board: React.FC = () => {
 
 	return (
 		<>
+			<div className="mb-6 font-bold text-2xl md:text-3xl">{status}</div>
 			<div className="mx-auto grid grid-cols-3">
 				{renderCell(0)}
 				{renderCell(1)}
@@ -51,7 +53,7 @@ const Board: React.FC = () => {
 				{renderCell(8)}
 			</div>
 			<button
-				className="mt-3 p-2 uppercase bg-black text-white font-bold rounded-md"
+				className="mt-4 md:mt-10 text-2xl md:text-3xl px-4 py-2 uppercase bg-black text-white font-bold rounded-md"
 				onClick={reset}
 			>
 				reset
@@ -92,4 +94,16 @@ const _calculateWinner = (cells: BoardType): CellValueType => {
 	}
 
 	return null;
+};
+
+const _calculateStatus = (
+	winner: CellValueType,
+	cells: BoardType,
+	nextValue: CellValueType
+) => {
+	return winner
+		? `😀yay! winner is ${winner} `
+		: cells.every(Boolean)
+		? "😮oops! that was close"
+		: `Next player: ${nextValue}`;
 };
