@@ -8,6 +8,10 @@ test("can play a set of game", () => {
 	const [c1, c2, c3, c4, c5, c6, c7, c8, c9] = Array.from(
 		screen.queryAllByRole("button")
 	);
+
+	// this line is added because now we store cells in local storage that damage the test case if cells are not empty
+	userEvent.click(screen.getByText("reset"));
+
 	expect(screen.getByText("Next player: X")).toBeInTheDocument();
 
 	userEvent.click(c1);
@@ -43,6 +47,16 @@ test("can play a set of game", () => {
 	// and ofcourse after the winner is determined user can not select another cell
 	userEvent.click(c4);
 	expect(c4).toHaveTextContent("");
+
+	// make sure that the "cells" localStorage item is updated with the JSON.stringified cells
+	expect(JSON.parse(window.localStorage.getItem("cells") as string)).toEqual(
+		// prettier-ignore
+		[
+	      'X', 'O', 'X',
+	      null, 'O', 'X',
+	      'O', null, 'X',
+	    ]
+	);
 });
 
 test("when the game has no winner or the game is draw", () => {
@@ -52,7 +66,10 @@ test("when the game has no winner or the game is draw", () => {
 		screen.queryAllByRole("button")
 	);
 
-	expect(screen.getByText("Next player: X")).toBeInTheDocument();
+	// this line is added because now we store cells in local storage that damage the test case if cells are not empty
+	userEvent.click(screen.getByText("reset"));
+
+	expect(screen.queryByText(/Next player: X/i)).toBeInTheDocument();
 
 	userEvent.click(c1);
 	expect(c1).toHaveTextContent("X");
