@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Game: React.FC = () => {
 	return (
@@ -10,7 +10,16 @@ const Game: React.FC = () => {
 };
 
 const Board: React.FC = () => {
-	const [cells, setCells] = useState<BoardType>(Array(9).fill(null));
+	const [cells, setCells] = useState<BoardType>(() => {
+		return (
+			JSON.parse(window.localStorage.getItem("cells") as string) ||
+			Array(9).fill(null)
+		);
+	});
+
+	useEffect(() => {
+		window.localStorage.setItem("cells", JSON.stringify(cells));
+	}, [cells]);
 
 	const nextValue = _calculateNextValue(cells);
 	const winner = _calculateWinner(cells);
