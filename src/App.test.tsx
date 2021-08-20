@@ -5,6 +5,7 @@ import App from "./App";
 test("can play a set of game", () => {
 	render(<App />);
 
+	// eslint-disable-next-line
 	const [c1, c2, c3, c4, c5, c6, c7, c8, c9] = Array.from(
 		screen.queryAllByRole("button")
 	);
